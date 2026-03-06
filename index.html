@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crumb & Co. — Artisan Cupcakes</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6ec;
+    --blush: #f2c4b0;
+    --dusty-rose: #d9877a;
+    --mocha: #5c3d2e;
+    --caramel: #b07848;
+    --sage: #a8b89a;
+    --text: #2e1f14;
+    --muted: #9e8070;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 48px;
+    background: rgba(253,246,236,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(92,61,46,0.08);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--mocha);
+    letter-spacing: 1px;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--dusty-rose); font-style: italic; }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--dusty-rose); }
+
+  .nav-cta {
+    background: var(--mocha);
+    color: var(--cream) !important;
+    padding: 10px 22px;
+    border-radius: 2px;
+    font-size: 0.75rem !important;
+    letter-spacing: 2px !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--dusty-rose) !important; color: #fff !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px 80px;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .hero-tag {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--caramel);
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 5.5vw, 6rem);
+    font-weight: 700;
+    line-height: 1.0;
+    color: var(--mocha);
+    margin-bottom: 28px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--dusty-rose);
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 400px;
+    margin-bottom: 44px;
+    font-weight: 300;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--mocha);
+    color: var(--cream);
+    padding: 15px 34px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.25s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--dusty-rose); transform: translateY(-2px); }
+
+  .btn-ghost {
+    font-size: 0.82rem;
+    color: var(--mocha);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--blush);
+    padding-bottom: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--dusty-rose); border-color: var(--dusty-rose); }
+
+  .hero-right {
+    position: relative;
+    background: var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 60%, rgba(217,135,122,0.3), transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(168,184,154,0.25), transparent 50%);
+  }
+
+  .cupcake-display {
+    position: relative;
+    z-index: 2;
+    font-size: 10rem;
+    animation: float 5s ease-in-out infinite;
+    filter: drop-shadow(0 30px 40px rgba(92,61,46,0.15));
+    user-select: none;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 60px;
+    left: -20px;
+    background: var(--cream);
+    border-radius: 50%;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(92,61,46,0.12);
+    animation: spin-slow 20s linear infinite;
+    z-index: 3;
+  }
+
+  .hero-badge-inner {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--mocha);
+    line-height: 1.3;
+  }
+
+  .hero-badge-inner strong { display: block; font-size: 1.4rem; font-style: normal; font-weight: 700; }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap {
+    background: var(--mocha);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-track {
+    display: inline-block;
+    animation: marquee 18s linear infinite;
+  }
+
+  .marquee-track span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--blush);
+    letter-spacing: 1px;
+    margin: 0 30px;
+  }
+
+  .marquee-track span.dot {
+    color: var(--dusty-rose);
+    font-style: normal;
+    font-size: 0.5rem;
+    vertical-align: middle;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 100px 80px; }
+
+  .section-tag {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 700;
+    color: var(--mocha);
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+
+  h2 em { font-style: italic; color: var(--dusty-rose); }
+
+  /* ─── FLAVOURS ─── */
+  .flavours { background: var(--cream); }
+
+  .flavours-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+  }
+
+  .flavours-header p {
+    max-width: 320px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .flavour-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .flavour-card {
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .flavour-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(92,61,46,0.12);
+  }
+
+  .flavour-img {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flavour-card:nth-child(1) .flavour-img { background: #fde8e8; }
+  .flavour-card:nth-child(2) .flavour-img { background: #fdf0e0; }
+  .flavour-card:nth-child(3) .flavour-img { background: #e8f0e8; }
+  .flavour-card:nth-child(4) .flavour-img { background: #e8e4f4; }
+
+  .flavour-info { padding: 20px 22px 24px; }
+
+  .flavour-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--mocha);
+    margin-bottom: 6px;
+  }
+
+  .flavour-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  .flavour-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--caramel);
+  }
+
+  /* ─── STORY ─── */
+  .story {
+    background: var(--mocha);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    padding: 100px 80px;
+  }
+
+  .story h2 { color: var(--cream); }
+  .story h2 em { color: var(--blush); }
+
+  .story p {
+    color: rgba(253,246,236,0.7);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+
+  .story-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .stat {
+    border-top: 1px solid rgba(253,246,236,0.2);
+    padding-top: 20px;
+  }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--blush);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(253,246,236,0.5);
+    margin-top: 6px;
+  }
+
+  .story-visual {
+    position: relative;
+    height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .story-circle {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(242,196,176,0.12);
+    border: 1px solid rgba(242,196,176,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7rem;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .story-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(242,196,176,0.1);
+    border: 1px solid rgba(242,196,176,0.15);
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { background: #fdf0e8; text-align: center; }
+
+  .testimonials h2 { margin-bottom: 56px; }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    text-align: left;
+  }
+
+  .testi-card {
+    background: var(--cream);
+    padding: 32px;
+    border-radius: 4px;
+    position: relative;
+  }
+
+  .testi-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    color: var(--blush);
+    line-height: 1;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .testi-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+
+  .testi-author {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    font-weight: 500;
+  }
+
+  .stars { color: var(--dusty-rose); font-size: 0.85rem; margin-bottom: 14px; }
+
+  /* ─── ORDER ─── */
+  .order-section {
+    background: var(--blush);
+    text-align: center;
+    padding: 100px 80px;
+  }
+
+  .order-section h2 { margin-bottom: 14px; }
+
+  .order-section p {
+    color: var(--mocha);
+    opacity: 0.7;
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--text);
+    color: rgba(253,246,236,0.6);
+    padding: 60px 80px 40px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+
+  .footer-brand span { color: var(--blush); font-style: italic; }
+
+  footer p { font-size: 0.83rem; line-height: 1.7; font-weight: 300; }
+
+  .footer-col h4 {
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 18px;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li {
+    margin-bottom: 10px;
+    font-size: 0.83rem;
+    font-weight: 300;
+  }
+
+  .footer-col ul li a {
+    color: rgba(253,246,236,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul li a:hover { color: var(--blush); }
+
+  .footer-bottom {
+    background: var(--text);
+    padding: 20px 80px;
+    border-top: 1px solid rgba(253,246,236,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-size: 0.75rem;
+    color: rgba(253,246,236,0.35);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 60px 24px 40px; }
+    .hero-right { height: 320px; }
+    section { padding: 70px 24px; }
+    .flavour-grid { grid-template-columns: repeat(2, 1fr); }
+    .story { grid-template-columns: 1fr; padding: 70px 24px; }
+    .testi-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr 1fr; padding: 48px 24px 32px; }
+    .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 6px; }
+    .order-section { padding: 70px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Crumb <span>&</span> Co.</a>
+  <ul class="nav-links">
+    <li><a href="#flavours">Flavours</a></li>
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#order" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Handcrafted Daily — Bengaluru</p>
+    <h1>Baked with<br><em>love,</em><br>frosted to<br>perfection.</h1>
+    <p class="hero-desc">Small-batch artisan cupcakes made from scratch every morning. No preservatives, no shortcuts — just real butter, fresh cream, and a whole lot of heart.</p>
+    <div class="hero-btns">
+      <a href="#order" class="btn-primary">Order Today</a>
+      <a href="#flavours" class="btn-ghost">See Flavours →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="cupcake-display">🧁</div>
+    <div class="hero-badge">
+      <div class="hero-badge-inner"><strong>100%</strong>made<br>fresh</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Red Velvet</span><span class="dot">◆</span>
+    <span>Salted Caramel</span><span class="dot">◆</span>
+    <span>Lemon Curd</span><span class="dot">◆</span>
+    <span>Dark Chocolate</span><span class="dot">◆</span>
+    <span>Rose Pistachio</span><span class="dot">◆</span>
+    <span>Vanilla Bean</span><span class="dot">◆</span>
+    <span>Mango Cream</span><span class="dot">◆</span>
+    <span>Matcha White Choc</span><span class="dot">◆</span>
+    <span>Red Velvet</span><span class="dot">◆</span>
+    <span>Salted Caramel</span><span class="dot">◆</span>
+    <span>Lemon Curd</span><span class="dot">◆</span>
+    <span>Dark Chocolate</span><span class="dot">◆</span>
+    <span>Rose Pistachio</span><span class="dot">◆</span>
+    <span>Vanilla Bean</span><span class="dot">◆</span>
+    <span>Mango Cream</span><span class="dot">◆</span>
+    <span>Matcha White Choc</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<!-- FLAVOURS -->
+<section class="flavours" id="flavours">
+  <div class="flavours-header reveal">
+    <div>
+      <p class="section-tag">This Week's Menu</p>
+      <h2>Our <em>signature</em><br>flavours</h2>
+    </div>
+    <p>Each cupcake is made to order and ready for pickup or delivery. Seasonal flavours rotate weekly.</p>
+  </div>
+  <div class="flavour-grid">
+    <div class="flavour-card reveal">
+      <div class="flavour-img">🍫</div>
+      <div class="flavour-info">
+        <div class="flavour-name">Dark Chocolate</div>
+        <div class="flavour-desc">Rich Belgian cocoa cake with whipped ganache and a dusting of sea salt.</div>
+        <div class="flavour-price">₹120</div>
+      </div>
+    </div>
+    <div class="flavour-card reveal">
+      <div class="flavour-img">🍋</div>
+      <div class="flavour-info">
+        <div class="flavour-name">Lemon Curd</div>
+        <div class="flavour-desc">Zesty lemon sponge filled with tangy curd, topped with Italian meringue.</div>
+        <div class="flavour-price">₹130</div>
+      </div>
+    </div>
+    <div class="flavour-card reveal">
+      <div class="flavour-img">🌹</div>
+      <div class="flavour-info">
+        <div class="flavour-name">Rose Pistachio</div>
+        <div class="flavour-desc">Persian-inspired rosewater sponge with pistachio cream and dried petals.</div>
+        <div class="flavour-price">₹140</div>
+      </div>
+    </div>
+    <div class="flavour-card reveal">
+      <div class="flavour-img">🍮</div>
+      <div class="flavour-info">
+        <div class="flavour-name">Salted Caramel</div>
+        <div class="flavour-desc">Brown butter sponge, caramel core, and silky caramel buttercream.</div>
+        <div class="flavour-price">₹135</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="reveal">
+    <p class="section-tag" style="color:var(--blush)">Since 2018</p>
+    <h2>A little bakery<br>with a <em>big</em> heart.</h2>
+    <p>What started as weekend baking for friends grew into something we never expected — a community of people who believe a really good cupcake can make any day better.</p>
+    <p>We use locally sourced dairy, seasonal fruits, and recipes refined over hundreds of batches. Every cupcake leaves our kitchen only when it's exactly right.</p>
+    <div class="story-stats">
+      <div class="stat">
+        <span class="stat-num">48k+</span>
+        <span class="stat-label">Cupcakes baked</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">12</span>
+        <span class="stat-label">Rotating flavours</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">4.9★</span>
+        <span class="stat-label">Avg. rating</span>
+      </div>
+    </div>
+  </div>
+  <div class="story-visual reveal">
+    <div class="story-dot" style="width:380px;height:380px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+    <div class="story-dot" style="width:260px;height:260px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+    <div class="story-circle">🧁</div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <p class="section-tag reveal">What people say</p>
+  <h2 class="reveal">Made with love,<br><em>tasted with joy.</em></h2>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">Ordered a box of 12 for my daughter's birthday. Every single person at the party asked where they were from. The rose pistachio is absolutely divine.</p>
+      <span class="testi-author">— Priya M., Koramangala</span>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">I've tried cupcakes from all over the city. Nothing compares. The lemon curd filling is perfectly tart and the meringue topping is just show-stopping.</p>
+      <span class="testi-author">— Arun K., Indiranagar</span>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">We've made Crumb & Co. our go-to for every office celebration. Reliable, beautiful, and absolutely delicious every single time. Can't recommend enough!</p>
+      <span class="testi-author">— Sneha R., Whitefield</span>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER CTA -->
+<section class="order-section" id="order">
+  <p class="section-tag reveal">Ready to indulge?</p>
+  <h2 class="reveal">Order your box<br><em>today.</em></h2>
+  <p class="reveal">Available for pickup or delivery across Bengaluru. Minimum order: 6 cupcakes. Custom orders welcome for events.</p>
+  <div class="reveal" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a href="tel:+919876543210" class="btn-primary" style="background:var(--mocha)">📞 Call to Order</a>
+    <a href="https://wa.me/919876543210" class="btn-primary" style="background:#25d366">💬 WhatsApp Us</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">Crumb <span>&</span> Co.</div>
+    <p>Artisan cupcakes baked fresh daily in Bengaluru. Every order made with care, delivered with love.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Menu</h4>
+    <ul>
+      <li><a href="#">Signature Flavours</a></li>
+      <li><a href="#">Seasonal Specials</a></li>
+      <li><a href="#">Custom Orders</a></li>
+      <li><a href="#">Gift Boxes</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Info</h4>
+    <ul>
+      <li><a href="#">Our Story</a></li>
+      <li><a href="#">Ingredients</a></li>
+      <li><a href="#">Allergen Info</a></li>
+      <li><a href="#">FAQ</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Find Us</h4>
+    <ul>
+      <li><a href="#">12 Baker Street, Indiranagar</a></li>
+      <li><a href="#">Tue–Sun, 9am–7pm</a></li>
+      <li><a href="#">hello@crumbandco.in</a></li>
+      <li><a href="#">@crumbandco</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2025 Crumb & Co. All rights reserved.</p>
+  <p>Made with 🧁 in Bengaluru</p>
+</div>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
